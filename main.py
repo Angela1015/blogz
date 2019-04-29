@@ -19,8 +19,8 @@ class Blog(db.Model):
         self.completed = False
 
 
-@app.route('/', methods=['POST', 'GET'])
-def index():
+@app.route('/newpost', methods=['POST', 'GET'])
+def newpost():
 
     if request.method == 'POST':
         blog_name = request.form['blog']
@@ -30,7 +30,7 @@ def index():
 
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
-    return render_template('blogs.html',title="Build A Blog!", 
+    return render_template('newpost.html',title="Build A Blog!", 
         blogs=blogs, completed_blogs=completed_blogs)
 
 
