@@ -33,6 +33,25 @@ def newpost():
     return render_template('newpost.html',title="Build A Blog!", 
         blogs=blogs, completed_blogs=completed_blogs)
 
+@app.route ('/blog', methods = ['POST','GET'] )
+def blog():
+    
+    if request.method == 'POST':
+        blog_name = request.form['blog']
+        new_blog = Blog(blog_name)
+        db.session.add(new_blog)
+        db.session.commit()
+
+    blogs = Blog.query.filter_by(completed=False).all()
+    completed_blogs = Blog.query.filter_by(completed=True).all()
+    return render_template('blog.html',title="Build A Blog!", 
+        blogs=blogs, completed_blogs=completed_blogs)
+
+
+
+
+
+
 
 @app.route('/delete-blog', methods=['POST'])
 def delete_blog():
