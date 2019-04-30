@@ -20,7 +20,8 @@
 
         <ul>
             {% for blog in blogs %}
-            <li>{{blog.name}}
+            <li><h2>{{blog.title}}</h2>
+                {{blog.name}}
                 <form method="POST" action="/delete-blog" style="display:inline-block;">
                     <input type="hidden" name="blog-id" value="{{blog.id}}" />
                     <input type="submit" value="Done!" />
