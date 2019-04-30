@@ -12,8 +12,7 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
-    completed = db.Column(db.Boolean)
-
+    
     def __init__(self, name):
         self.name = name
         self.completed = False
@@ -28,10 +27,10 @@ def newpost():
         db.session.add(new_blog)
         db.session.commit()
 
-    blogs = Blog.query.filter_by(completed=False).all()
-    completed_blogs = Blog.query.filter_by(completed=True).all()
+    blogs = Blog.query.filter_by(id).all()
+    
     return render_template('newpost.html',title="Build A Blog!", 
-        blogs=blogs, completed_blogs=completed_blogs)
+        blogs=blogs)
 
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
@@ -45,7 +44,7 @@ def blog():
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('blog.html',title="Build A Blog!", 
-        blogs=blogs, completed_blogs=completed_blogs)
+        blogs=blogs)
 
 
 
