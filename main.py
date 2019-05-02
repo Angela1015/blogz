@@ -12,25 +12,29 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
-    
-    def __init__(self, name):
+    blog_content = db.Column(db.String(240))
+    completed = db.Column(db.Boolean)
+
+    def __init__(self, name,blog_content):
         self.name = name
         self.completed = False
-
+        self.blog_content=blog_content
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
 
     if request.method == 'POST':
         blog_name = request.form['blog']
-        new_blog = Blog(blog_name)
+        blog_content = request.form['blog_content']
+        new_blog = Blog(blog_name, blog_content)
+        
         db.session.add(new_blog)
         db.session.commit()
 
-    blogs = Blog.query.filter_by(id).all()
-    
+    blogs = Blog.query.filter_by(completed=False).all()
+    completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('newpost.html',title="Build A Blog!", 
-        blogs=blogs)
+        blogs=blogs, completed_blogs=completed_blogs)
 
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
@@ -38,13 +42,13 @@ def blog():
     if request.method == 'POST':
         blog_name = request.form['blog']
         new_blog = Blog(blog_name)
-        db.session.add(new_blog)
+        db.session.add(new_blog,new_blog_content)
         db.session.commit()
 
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('blog.html',title="Build A Blog!", 
-        blogs=blogs)
+        blogs=blogs, completed_blogs=completed_blogs)
 
 
 
@@ -67,4 +71,4 @@ def delete_blog():
 if __name__ == '__main__':
     app.run()
     #trying to mess up github
-    #trying to mess up github again
+    #trying to mess up github againfrom flask import Flask, request, redirect, render_template
