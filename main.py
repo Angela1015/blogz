@@ -27,10 +27,15 @@ def newpost():
         blog_name = request.form['blog']
         blog_content = request.form['blog_content']
         new_blog = Blog(blog_name, blog_content)
-        
-        db.session.add(new_blog)
-        db.session.commit()
-
+        if blog_content and blog_name:
+            
+           
+            
+            db.session.add(new_blog)
+            db.session.commit()
+            return redirect("/blog")
+        else:
+            return '<h1>Error</h1>'
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('newpost.html',title="Build A Blog!", 
