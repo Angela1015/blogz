@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -35,7 +35,8 @@ def newpost():
             db.session.commit()
             return redirect("/blog")
         else:
-            return '<h1>Error</h1>'
+            return"<h1>cannot be left blank</h1>"
+        
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('newpost.html',title="Build A Blog!", 
