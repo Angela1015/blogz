@@ -29,7 +29,13 @@ def newpost():
         blog_content = request.form['blog_content']
         new_blog = Blog(blog_name, blog_content)
 
-        
+        if not blog_name:
+           
+                flash("This field must be completed")
+
+        elif not blog_content:
+                 flash("This field must be completed") 
+                 
 
         if blog_content and blog_name:
             
@@ -38,10 +44,7 @@ def newpost():
             db.session.add(new_blog)
             db.session.commit()
             return redirect("/blog")
-        else:
-            if not blog_name:
-           
-                flash("This field must be completed")
+        
         
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
