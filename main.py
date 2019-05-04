@@ -28,6 +28,9 @@ def newpost():
         blog_name = request.form['blog']
         blog_content = request.form['blog_content']
         new_blog = Blog(blog_name, blog_content)
+
+        
+
         if blog_content and blog_name:
             
            
