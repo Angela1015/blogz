@@ -7,8 +7,12 @@
 <body>
     <a href="http://127.0.0.1:5000/newpost">Add a Blog Entry</a>
     <a href="http://127.0.0.1:5000/blog">Main Blog Page</a>
-    
-    
+    {% with messages = get_flashed_messages()%}   
+       <h3> {% for message in messages %}
+            {{message}}
+        {% endfor %}
+        </h3>
+    {% endwith %}
     {% block content %}
     {% endblock %}
 
