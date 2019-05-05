@@ -29,23 +29,17 @@ def newpost():
         blog_content = request.form['blog_content']
         new_blog = Blog(blog_name, blog_content)
 
-        if not blog_name:
-           
+        if not blog_name:           
                 flash("This field must be completed")
 
         elif not blog_content:
-                 flash("This field must be completed") 
-                 
+                 flash("This field must be completed")                  
 
-        if blog_content and blog_name:
-            
-           
-            
+        if blog_content and blog_name:                                  
             db.session.add(new_blog)
             db.session.commit()
             return redirect("/blog")
-        
-        
+                
     blogs = Blog.query.filter_by(completed=False).all()
     completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('newpost.html',title="Build A Blog!", 
@@ -65,23 +59,6 @@ def blog():
     completed_blogs = Blog.query.filter_by(completed=True).all()
     return render_template('blog.html',title="Build A Blog!", 
         blogs=blogs, completed_blogs=completed_blogs)
-
-
-
-
-
-
-
-@app.route('/delete-blog', methods=['POST'])
-def delete_blog():
-
-    blog_id = int(request.form['blog-id'])
-    blog = Blog.query.get(blog_id)
-    blog.completed = True
-    db.session.add(blog)
-    db.session.commit()
-
-    return redirect('/')
 
 
 if __name__ == '__main__':
