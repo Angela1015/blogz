@@ -25,7 +25,7 @@ class Blog(db.Model):
 def newpost():
 
     if request.method == 'POST':
-        blog_name = request.form['blog']
+        blog_name = request.form['blog_title']
         blog_content = request.form['blog_content']
         new_blog = Blog(blog_name, blog_content)
 
@@ -60,6 +60,14 @@ def blog():
     return render_template('blog.html',title="Build A Blog!", 
         blogs=blogs, completed_blogs=completed_blogs)
 
+@app.route ('/individualblog', methods= ['GET'])
+def individualblog():
+    if request.method == "GET":
+        
+        blog_name = name
+        blog_content = blog_content   
+        individualblog=request.args.get('individualblog')
+    return render_template('individualblog.html',blog_content=blog_content,blog_name=blog)
 
 if __name__ == '__main__':
     app.run()
