@@ -13,11 +13,10 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
     blog_content = db.Column(db.String(240))
-    completed = db.Column(db.Boolean)
+   
     
     def __init__(self, name,blog_content):
         self.name = name
-        self.completed = False
         self.blog_content=blog_content
        
 
@@ -39,35 +38,29 @@ def newpost():
             db.session.add(new_blog)
             db.session.commit()
             return redirect("/blog")
-                
-    blogs = Blog.query.filter_by(completed=False).all()
-    completed_blogs = Blog.query.filter_by(completed=True).all()
-    return render_template('newpost.html',title="Build A Blog!", 
-        blogs=blogs, completed_blogs=completed_blogs)
 
+
+    
+    
+    return render_template('newpost.html',title="Build A Blog!")
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
     
-    if request.method == 'POST':
-        blog_name = request.form['blog']
-        new_blog = Blog(blog_name)
         
-        db.session.add(new_blog,new_blog_content)
-        db.session.commit()
 
-    blogs = Blog.query.filter_by(completed=False).all()
-    completed_blogs = Blog.query.filter_by(completed=True).all()
+    blogs = Blog.query.all()
+    
     return render_template('blog.html',title="Build A Blog!", 
-        blogs=blogs, completed_blogs=completed_blogs)
+        blogs=blogs)
 
 @app.route ('/individualblog', methods= ['GET'])
 def individualblog():
     if request.method == "GET":
+       blogs = Blog.query.filter_by(completed=False).all
+       
+          
         
-        blog_name = name
-        blog_content = blog_content   
-        individualblog=request.args.get('individualblog')
-    return render_template('individualblog.html',blog_content=blog_content,blog_name=blog)
+    return render_template('individualblog.html',title = "Build A Blog",blogs=blogs,completed_blogs=completed_blogs)
 
 if __name__ == '__main__':
     app.run()
