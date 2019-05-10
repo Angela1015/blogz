@@ -34,10 +34,7 @@ def newpost():
         elif not blog_content:
                 flash("This field must be completed")                  
 
-        if blog_content and blog_name:  
-
-                
-                                                
+        if blog_content and blog_name:                                  
             db.session.add(new_blog)
             db.session.commit()
             return redirect("/blog")
