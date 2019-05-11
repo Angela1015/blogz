@@ -33,8 +33,7 @@ def newpost():
             blog_title_error = "Please complete this field" 
             blog_title = ""
            
-            
-
+         
         if not blog_body:
             blog_body_error = "Please complete this field"
             blog_body = ""
@@ -43,9 +42,11 @@ def newpost():
             db.session.add(new_blog)
             db.session.commit()
             return redirect("/blog") 
-        else:
     
-            return render_template('newpost.html',title="Build A Blog!",blog_title_error ="Please complete this field",blog_body_error ="Please complete this field")
+        else:
+
+            return render_template('newpost.html',title="Build A Blog!",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
+            
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
         
