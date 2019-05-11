@@ -2,13 +2,16 @@
 
 {% block content %}
     <h1>Add a Blog Entry</h1>
+    
     <form method='POST'>
 
         
         <label for = title>Title for your new blog:</label>            
-          <input id = title type="text" name='blog_title' />
+          <input id = title type="text" name='blog_title' value = {{blog_title}}>
+          <p>{{blog_title_error}}</p>
         <label>Your new blog:</label>
-        <textarea rows = "6" cols ="40"name="blog_content"></textarea>
+        <textarea rows = "6" cols ="40"name='blog_body' value = {{blog_body}}></textarea>
+        <p>{{blog_body_error}}</p>
         <input type="submit" value='Add Entry' />
     </form>
 

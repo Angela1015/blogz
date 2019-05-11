@@ -11,56 +11,49 @@ app.secret_key = 'y337kGcys&zP3B'
 class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120))
-    blog_content = db.Column(db.String(240))
-   
-    
-    def __init__(self, name,blog_content):
-        self.name = name
-        self.blog_content=blog_content
+    title = db.Column(db.String(120))
+    body = db.Column(db.String(240))
        
+    def __init__(self, title,body):
+        self.title = title
+        self.body = body
+      
 
 @app.route('/newpost', methods=['POST', 'GET'])
+
 def newpost():
-
     if request.method == 'POST':
-        blog_name = request.form['blog_title']
-        blog_content = request.form['blog_content']
-        new_blog = Blog(blog_name, blog_content)
+        blog_title = request.form['blog_title']
+        blog_body = request.form['blog_body']
+        new_blog = Blog(blog_title, blog_body)
+        blog_title_error = ''
+        blog_body_error = ''
+   
+        if not blog_title:
+            blog_title_error = "Please complete this field" 
+            blog_title = ""
+           
+            
 
-        if not blog_name and blog_content:           
-                flash("This field must be completed")
+        if not blog_body:
+            blog_body_error = "Please complete this field"
+            blog_body = ""
 
-        elif not blog_content:
-                flash("This field must be completed")                  
-
-        if blog_content and blog_name:                                  
+        if not blog_title_error and not blog_body_error:
             db.session.add(new_blog)
             db.session.commit()
-            return redirect("/blog")
-
-
+            return redirect("/blog") 
+        else:
     
-    
-    return render_template('newpost.html',title="Build A Blog!")
+            return render_template('newpost.html',title="Build A Blog!")
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
-    
         
-
     blogs = Blog.query.all()
     
     return render_template('blog.html',title="Build A Blog!", 
         blogs=blogs)
 
-@app.route ('/individualblog', methods= ['GET'])
-def individualblog():
-    if request.method == "GET":
-       blogs = Blog.query.filter_by(completed=False).all
-       
-          
-        
-    return render_template('individualblog.html',title = "Build A Blog",blogs=blogs,completed_blogs=completed_blogs)
 
 if __name__ == '__main__':
     app.run()
