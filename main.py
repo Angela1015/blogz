@@ -17,7 +17,7 @@ class Blog(db.Model):
     def __init__(self, title,body):
         self.title = title
         self.body = body
-      
+        
 
 @app.route('/newpost', methods=['POST', 'GET'])
 
@@ -35,12 +35,12 @@ def newpost():
     # if request.method == 'POST':
        # return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
         if not blog_title:
-            blog_title_error="P;eas complete this field"
-            
+            blog_title_error="Please complete this field."
+            blog_title = ""
                         
         if not blog_body:
-            blog_body_error="Pleaedd comle;t th"
-            
+            blog_body_error="Please complete this field."
+            blog_body = ""
 
         if  blog_title and  blog_body:
             db.session.add(new_blog)
@@ -48,7 +48,7 @@ def newpost():
             return redirect("/blog") 
 
         else:
-            return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
+            return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
 #return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,)
             
 @app.route ('/blog', methods = ['POST','GET'] )
@@ -58,7 +58,13 @@ def blog():
     
     return render_template('blog.html',title="Build A Blog!", 
         blogs=blogs)
-
+# @app.route ('/individualblog', methods =['GET'])
+# def individualblog ():
+    # if request.method == 'GET':
+        # blog_id = request.args.get('id')
+        
+        # return render_template('individualblog.html')
+       
 
 if __name__ == '__main__':
     app.run()
