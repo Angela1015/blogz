@@ -62,8 +62,8 @@ def blog():
 # def individualblog ():
     # if request.method == 'GET':
         # blog_id = request.args.get('id')
-        
-        # return render_template('individualblog.html')
+        # blog = Blog.query.get(blog_id)
+        # return render_template('individualblog.html',blog=blog)
        
 
 if __name__ == '__main__':
