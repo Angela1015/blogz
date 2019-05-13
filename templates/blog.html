@@ -10,7 +10,7 @@
 
         
             {% for blog in blogs %}
-            <a href = http://127.0.0.1:5000/individualblog><h2>{{blog.title}}</h2></a>
+            <a href = './blog?id={{blog.id}}'><h2>{{blog.title}}</h2></a>
                 <h3>{{blog.body}}</h3>
                 
             {% endfor %}

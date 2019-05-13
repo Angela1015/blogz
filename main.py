@@ -59,7 +59,12 @@ def blog():
         
         return render_template('blog.html',title="Build A Blog!", 
             blogs=blogs)
-
+    blog_id = request.args.get('id')
+    if not blog_id:
+        return render_template('blog.html',title = "Build A Blog")
+    else:
+        blog = Blog.query.get(blog_id)
+        return render_template('individual.html',blog_id=blog_id)
 # @app.route ('/individualblog', methods =['GET'])
 # def individualblog ():
     # if request.method == 'GET':
