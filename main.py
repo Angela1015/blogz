@@ -45,7 +45,7 @@ def newpost():
         if  blog_title and  blog_body:
             db.session.add(new_blog)
             db.session.commit()
-            return redirect("/blog") 
+            return redirect("/blog?id={}".format(new_blog)) 
 
         else:
             return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
@@ -64,7 +64,7 @@ def blog():
         return render_template('blog.html',title = "Build A Blog")
     else:
         blog = Blog.query.get(blog_id)
-        return render_template('individual.html',blog_id=blog_id)
+        return render_template('individualblog.html',blog_id=blog_id)
 # @app.route ('/individualblog', methods =['GET'])
 # def individualblog ():
     # if request.method == 'GET':
