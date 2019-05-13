@@ -53,11 +53,13 @@ def newpost():
             
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
+    if request.method == "GET":
         
-    blogs = Blog.query.all()
-    
-    return render_template('blog.html',title="Build A Blog!", 
-        blogs=blogs)
+        blogs = Blog.query.all()
+        
+        return render_template('blog.html',title="Build A Blog!", 
+            blogs=blogs)
+
 # @app.route ('/individualblog', methods =['GET'])
 # def individualblog ():
     # if request.method == 'GET':
