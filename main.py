@@ -39,32 +39,39 @@ def newpost():
             blog_title = ""
                         
         if not blog_body:
-            blog_body_error="Please complete this field."
-            blog_body = ""
+             blog_body_error="Please complete this field."
+             blog_body = ""
 
-        if  blog_title and  blog_body:
-            db.session.add(new_blog)
-            db.session.commit()
-            return redirect("/blog?id={}".format(new_blog)) 
-
+        if not blog_title and not blog_body:
+             return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,blog_title=blog_title,blog_body=blog_body)
         else:
-            return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
+            db.session.add(new_blog)  
+            db.session.commit()  
+    return redirect("/.blog?id={}".format(new_blog.id))
+       # if  blog_title and  blog_body:
+           # db.session.add(new_blog)
+           # db.session.commit()
+           # return redirect("/blog?id={}".format(new_blog)) 
+
+       # else:
+            #return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
 #return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,)
             
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
-    if request.method == "GET":
-        
+   # if request.method == "GET":
+    blog_id = request.args.get('id')
+    if not blog_id:    
         blogs = Blog.query.all()
         
-        return render_template('blog.html',title="Build A Blog!", 
-            blogs=blogs)
-    blog_id = request.args.get('id')
-    if not blog_id:
-        return render_template('blog.html',title = "Build A Blog")
+        return render_template('blog.html',title="Build A Blog!",blogs=blogs) 
+            
+    #blog_id = request.args.get('id')
+    #if not blog_id:
+        #return render_template('blog.html',title = "Build A Blog",newpost=newpost)
     else:
-        blog = Blog.query.get(blog_id)
-        return render_template('individualblog.html',blog_id=blog_id)
+        new_blog = Blog.query.get(blog_id)
+        return render_template('individualblog.html',title="Build A Blog",new_blog=new_blog)
 # @app.route ('/individualblog', methods =['GET'])
 # def individualblog ():
     # if request.method == 'GET':
