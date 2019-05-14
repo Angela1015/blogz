@@ -9,11 +9,11 @@
     {% else %}
 
         
-            {% for new_blog in blogs %}
-            <a href = "/.blog?id={{blog.id}}"><h2>{{blog.title}}</h2></a>
+    {% for blog in blogs %}
+            <a href = './blog?id={{blog.id}}'><h2>{{blog.title}}</h2></a>
                 <h3>{{blog.body}}</h3>
                 
-            {% endfor %}
+    {% endfor %}
         
 
     {% endif %}

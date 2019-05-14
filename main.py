@@ -19,13 +19,16 @@ class Blog(db.Model):
         self.body = body
         
 
-@app.route('/newpost', methods=['POST', 'GET'])
+@app.route('/newpost')
 
 def newpost():
 
 #    return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
-    if request.method == 'GET':
-        return render_template('newpost.html',title = "Add A Blog")
+    #if request.method == 'GET':
+    return render_template('newpost.html',title = "Add A Blog")
+
+@app.route('/newpost', methods = ['POST','GET'])
+def add_newpost():        
     if request.method == "POST":
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
@@ -36,18 +39,21 @@ def newpost():
        # return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
         if not blog_title:
             blog_title_error="Please complete this field."
-            blog_title = ""
+        
+            blog_title_error = ""
                         
         if not blog_body:
-             blog_body_error="Please complete this field."
-             blog_body = ""
+            blog_body_error="Please complete this field."
+        
+            blog_body_error = ""
 
-        if not blog_title and not blog_body:
-             return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,blog_title=blog_title,blog_body=blog_body)
+        if blog_title_error or blog_body_error:
+            return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,blog_title=blog_title,blog_body=blog_body)
         else:
             db.session.add(new_blog)  
             db.session.commit()  
-    return redirect("/.blog?id={}".format(new_blog.id))
+            url = "/blog?id="+str(new_blog.id)
+            return redirect(url)
        # if  blog_title and  blog_body:
            # db.session.add(new_blog)
            # db.session.commit()
