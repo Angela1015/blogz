@@ -39,15 +39,15 @@ def add_newpost():
        # return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
         if not blog_title:
             blog_title_error="Please complete this field."
-            blog_title_error=""
+            #blog_title_error=""
             
                         
         if not blog_body:
             blog_body_error="Please complete this field."
-            blog_body_error=""
+           # blog_body_error=""
            
 
-        if not blog_title_error and not blog_body_error:
+        if blog_title and blog_body:
             #new_blog = Blog(blog_title, blog_body)
             db.session.add(new_blog)  
             db.session.commit()  
@@ -57,7 +57,7 @@ def add_newpost():
             return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
         
             
-       # if  blog_title and  blog_body:
+       # if  blog_title and  blog_body:g
            # db.session.add(new_blog)
            # db.session.commit()
            # return redirect("/blog?id={}".format(new_blog)) 
