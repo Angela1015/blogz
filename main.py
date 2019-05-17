@@ -17,7 +17,28 @@ class Blog(db.Model):
     def __init__(self, title,body):
         self.title = title
         self.body = body
-       
+
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(20), unique=True)
+    password = db.Column(db.String(20))
+   
+    def __init__(self,email,password):
+        self.email = email
+        self.password = password
+
+@app.route('/login')
+def login():
+        
+    return render_template('login.html')
+@app.route('/register')
+def signup():
+        
+    return render_template('register.html')
+
+
+
 
 @app.route('/newpost')
 
