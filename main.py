@@ -28,13 +28,39 @@ class User(db.Model):
         self.email = email
         self.password = password
 
-@app.route('/login')
+@app.route('/login', methods= ['POST','GET'])
 def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        if user and user.password == password:
+            #TODO remember user has logged in
+            return redirect ('/newpost')
+        else:
+            #TODO - explain why login failed
+            return '<h1>error!<h1>'
         
     return render_template('login.html')
-@app.route('/register')
-def signup():
-        
+@app.route('/register', methods =['POST','GET'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        verify = request.form['verify']
+        #TODO validate data
+        existing_user = User.query.filter_by(email=email).first()
+        if not existing_user:
+            new_user = User(email,password)
+            db.session.add(new_user)
+            db.session.commit()
+            #TODO remember the user
+            return redirect('/newpost')
+        else:
+            
+            #TODO use better respomse messaging
+            return "<h1>DUPLICATE USER<h1>"
+
     return render_template('register.html')
 
 
@@ -44,8 +70,7 @@ def signup():
 
 def newpost():
 
-#    return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
-    #if request.method == 'GET':
+
     return render_template('newpost.html',title = "Add A Blog")
 
 @app.route('/newpost', methods = ['POST','GET'])
@@ -56,8 +81,7 @@ def add_newpost():
         new_blog = Blog(blog_title, blog_body)
         blog_title_error = ''
         blog_body_error = ''
-    # if request.method == 'POST':
-       # return render_template('newpost.html',title = "Add A Blog",blog_title_error = blog_title_error,blog_body_error=blog_body_error)
+    
         if not blog_title:
             blog_title_error="Please complete this field."
             #blog_title_error=""
@@ -78,36 +102,24 @@ def add_newpost():
             return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
         
             
-       # if  blog_title and  blog_body:g
-           # db.session.add(new_blog)
-           # db.session.commit()
-           # return redirect("/blog?id={}".format(new_blog)) 
+        
 
        #
-    return render_template('newpost.html',title = "Add A Blog!")#,blog_title_error = blog_title_error,blog_body_error=blog_body_error,blog_title=blog_title,blog_body=blog_body)
-#return render_template('newpost.html',title="Add A Blog!",blog_title_error=blog_title_error,)
+    return render_template('newpost.html',title = "Add A Blog!")
             
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
-   # if request.method == "GET":
+   
     blog_id = request.args.get('id')
     if not blog_id:    
         blogs = Blog.query.all()
         
         return render_template('blog.html',title="Build A Blog!",blogs=blogs) 
-            
-    #blog_id = request.args.get('id')
-    #if not blog_id:
-        #return render_template('blog.html',title = "Build A Blog",newpost=newpost)
+    
     else:
         blog = Blog.query.get(blog_id)
         return render_template('individualblog.html',title="Build A Blog",blog=blog)
-# @app.route ('/individualblog', methods =['GET'])
-# def individualblog ():
-    # if request.method == 'GET':
-        # blog_id = request.args.get('id')
-        # blog = Blog.query.get(blog_id)
-        # return render_template('individualblog.html',blog=blog)
+
        
 
 if __name__ == '__main__':
