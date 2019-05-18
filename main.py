@@ -21,17 +21,17 @@ class Blog(db.Model):
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(20), unique=True)
+    username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(20))
    
-    def __init__(self,email,password):
-        self.email = email
+    def __init__(self,username,password):
+        self.username = username
         self.password = password
 
 @app.before_request
 def require_login():
     allowed_routes = ['login','register']
-    if request.endpoint not in allowed_routes and 'email' not in session:
+    if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
 
@@ -40,11 +40,11 @@ def require_login():
 @app.route('/login', methods= ['POST','GET'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=username).first()
         if user and user.password == password:
-            session['email'] = email
+            session['username'] = username
             return redirect ('/newpost')
         else:
             #TODO - explain why login failed
@@ -54,16 +54,56 @@ def login():
 @app.route('/register', methods =['POST','GET'])
 def register():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
         #TODO validate data
-        existing_user = User.query.filter_by(email=email).first()
-        if not existing_user:
-            new_user = User(email,password)
+        username_error = ""
+        password_error = ""
+        verify_error = ""
+        
+        
+        if not username:
+            username_error = "Please enter a username"
+        
+        elif len(username)>20 or len(username)<3:
+            username_error = "Username must be between 3 and 20 characters"
+               
+
+        else:
+            hasSpace = False
+            for char in username:
+                if char.isspace():
+                    hasSpace = True            
+            if hasSpace:
+                username_error = "Username cannot contain spaces"        
+        
+
+        
+        if not password:
+            password_error = "Please enter a password"
+        
+        elif len(password)>20 or len(password)<3:
+            password_error = "Password must be between 3 and 20 characters"
+               
+
+        else:
+            hasSpace = False
+            for char in password:
+                if char.isspace():
+                    hasSpace = True            
+            if hasSpace:
+                password_error = "Password cannot contain spaces"
+                
+        if verify != password:
+            verify_error = "Passwords must match"
+        
+        existing_user = User.query.filter_by(username=username).first()
+        if not existing_user and not verify_error and not password_error and not username_error:
+            new_user = User(username,password)
             db.session.add(new_user)
             db.session.commit()
-            session['email'] = email
+            session['username'] = username
             return redirect('/newpost')
         else:
             
@@ -75,7 +115,7 @@ def register():
 
 @app.route('/logout')
 def logout():
-    del session['email']
+    del session['username']
     return redirect ('/blog')
 
 @app.route('/newpost')
