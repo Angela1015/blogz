@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, flash
+from flask import Flask, request, redirect, render_template, flash, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -28,6 +28,15 @@ class User(db.Model):
         self.email = email
         self.password = password
 
+@app.before_request
+def require_login():
+    allowed_routes = ['login','register']
+    if request.endpoint not in allowed_routes and 'email' not in session:
+        return redirect('/login')
+
+
+
+
 @app.route('/login', methods= ['POST','GET'])
 def login():
     if request.method == 'POST':
@@ -35,7 +44,7 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
         if user and user.password == password:
-            #TODO remember user has logged in
+            session['email'] = email
             return redirect ('/newpost')
         else:
             #TODO - explain why login failed
@@ -54,7 +63,7 @@ def register():
             new_user = User(email,password)
             db.session.add(new_user)
             db.session.commit()
-            #TODO remember the user
+            session['email'] = email
             return redirect('/newpost')
         else:
             
@@ -64,7 +73,10 @@ def register():
     return render_template('register.html')
 
 
-
+@app.route('/logout')
+def logout():
+    del session['email']
+    return redirect ('/blog')
 
 @app.route('/newpost')
 
