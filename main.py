@@ -141,7 +141,8 @@ def add_newpost():
     if request.method == "POST":
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
-        new_blog = Blog(blog_title, blog_body)
+        owner = User.query.filter_by(username=session['username']).first()
+        new_blog = Blog(blog_title, blog_body,owner)
         blog_title_error = ''
         blog_body_error = ''
     
@@ -157,6 +158,7 @@ def add_newpost():
 
         if blog_title and blog_body:
             #new_blog = Blog(blog_title, blog_body)
+            
             db.session.add(new_blog)  
             db.session.commit()  
             url = "/blog?id="+str(new_blog.id)
