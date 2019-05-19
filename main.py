@@ -105,10 +105,13 @@ def register():
             db.session.commit()
             session['username'] = username
             return redirect('/newpost')
+
+        elif existing_user:
+            flash('User already exists')    
         else:
             
             #TODO use better respomse messaging
-            return "<h1>DUPLICATE USER<h1>"
+            return render_template('register.html',username_error=username_error,password_error=password_error,verify_error=verify_error)
 
     return render_template('register.html')
 
