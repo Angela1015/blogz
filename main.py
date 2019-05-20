@@ -137,11 +137,12 @@ def newpost():
     return render_template('newpost.html',title = "Add A Blog")
 
 @app.route('/newpost', methods = ['POST','GET'])
-def add_newpost():        
+def add_newpost():
+    owner = User.query.filter_by(username=session['username']).first()        
     if request.method == "POST":
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
-        owner = User.query.filter_by(username=session['username']).first()
+        
         new_blog = Blog(blog_title, blog_body,owner)
         blog_title_error = ''
         blog_body_error = ''
@@ -174,10 +175,11 @@ def add_newpost():
             
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
-   
+    owner = User.query.filter_by(username=session['username']).first()   
+      
     blog_id = request.args.get('id')
     if not blog_id:    
-        blogs = Blog.query.all()
+        blogs = Blog.query.filter_by(owner=owner).all()
         
         return render_template('blog.html',title="Build A Blog!",blogs=blogs) 
     
