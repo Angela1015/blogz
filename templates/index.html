@@ -10,7 +10,7 @@
 
         
     {% for user in users %}
-            <h2>{{user.username}}</h2>
+         <a href = './blog?userid={{user.id}}'> <h2>{{user.username}}</h2></a>
                 
     {% endfor %}
         
