@@ -169,16 +169,27 @@ def add_newpost():
             
 @app.route ('/blog', methods = ['POST','GET'] )
 def blog():
-    owner = User.query.filter_by(username=session['username']).first()   
+     
     blog_id = request.args.get('id')
-
+    singleUserid = request.args.get('owner_id')   
     if not blog_id:    
         blogs = Blog.query.all()      
         return render_template('blog.html',title="Build A Blog!",blogs=blogs) 
-    else:
-        blogs = Blog.query.filter_by(owner=owner).first()
-        blog = Blog.query.get(blog_id)
-        return render_template('individualblog.html',title="Build A Blog",blog=blog,blogs=blogs)
+
+
+    
+       # else:
+           # if singleUserid:
+               # blogs = Blog.query.filter_by(owner_id=singleUserid)
+               # return render_template('singleUserr.html',blogs=blogs)
+
+
+
+    else: 
+        
+         blog = Blog.query.get(blog_id)
+         return render_template('individualblog.html',title="Build A Blog",blog=blog)
+   
 
 @app.route('/')
 def index():
