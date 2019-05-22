@@ -172,23 +172,37 @@ def blog():
      
     blog_id = request.args.get('id')
     singleUserid = request.args.get('owner_id')   
-    if not blog_id:    
-        blogs = Blog.query.all()      
-        return render_template('blog.html',title="Build A Blog!",blogs=blogs) 
+    if blog_id:
+        blog = Blog.query.get(blog_id)
+        return render_template('individualblog.html',title="Build A Blog",blog=blog)
+   
+    else:
+        if singleUserid:
+            blogs2 = Blog.query.filter_by(owner_id=singleUserid)
+            return render_template('singleUser.html',blogs=blogs2)
+
+
+
+        
+        #blogs2 = Blog.query.filter_by(owner_id=singleUserid)
+       # return render_template('singleUser.html',blogs=blogs2)    
+        else:
+            blogs = Blog.query.all()      
+            return render_template('blog.html',title="Build A Blog!",blogs=blogs) 
 
 
     
        # else:
            # if singleUserid:
-               # blogs = Blog.query.filter_by(owner_id=singleUserid)
-               # return render_template('singleUserr.html',blogs=blogs)
+               # blogs2 = Blog.query.filter_by(owner_id=singleUserid)
+               # return render_template('singleUser.html',blogs=blogs2)
 
 
 
-    else: 
+    #else: 
         
-         blog = Blog.query.get(blog_id)
-         return render_template('individualblog.html',title="Build A Blog",blog=blog)
+        # blog = Blog.query.get(blog_id)
+         #return render_template('individualblog.html',title="Build A Blog",blog=blog)
    
 
 @app.route('/')
