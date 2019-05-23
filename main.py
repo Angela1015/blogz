@@ -171,14 +171,15 @@ def add_newpost():
 def blog():
      
     blog_id = request.args.get('id')
-    singleUserid = request.args.get('owner_id')   
+    singleUserid = request.args.get('single_id')   
     if blog_id:
         blog = Blog.query.get(blog_id)
         return render_template('individualblog.html',title="Build A Blog",blog=blog)
    
     else:
         if singleUserid:
-            blogs2 = Blog.query.filter_by(owner_id=singleUserid)
+            user = User.query.get(singleUserid)
+            blogs2 = Blog.query.filter_by(owner=user)
             return render_template('singleUser.html',blogs=blogs2)
 
 
